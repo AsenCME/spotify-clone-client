@@ -6,6 +6,7 @@ import { IoPlay } from "react-icons/io5";
 import { Track } from "../utils/models";
 import useDuration from "../utils/hooks/useDuration";
 import { usePlayer } from "../utils/Player";
+import IconButton from "../componets/IconButton";
 
 export default function Dashboard(props: RouteComponentProps) {
   const { data, isLoading } = useQuery<Track[]>("/recents");
@@ -49,12 +50,9 @@ export default function Dashboard(props: RouteComponentProps) {
                     )}
                   </div>
                 </div>
-                <div
-                  className="ml-4 flex-none transition-all hover:scale-110 cursor-pointer text-gray-600 hover:text-black"
-                  onClick={() => play(`spotify:track:${x.id}`)}
-                >
+                <IconButton margin={{ l: 16 }} color="dark" onClick={() => play(`spotify:track:${x.id}`)}>
                   <IoPlay size={32} />
-                </div>
+                </IconButton>
               </div>
             ))}
       </div>

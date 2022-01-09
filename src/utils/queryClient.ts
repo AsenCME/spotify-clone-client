@@ -1,6 +1,6 @@
 import { navigate } from "@reach/router";
 import { QueryClient, useMutation } from "react-query";
-import { getHeaders } from "./tokens";
+import { getHeaders, saveTokens } from "./tokens";
 const base = process.env.BASE_URL || "http://localhost:4000";
 
 const onError = (e: any) => {
@@ -8,7 +8,7 @@ const onError = (e: any) => {
   if ("message" in err) {
     if (err.message === "unauth") {
       navigate("/");
-      alert("Token expired. Login again.");
+      alert("Unauthorized");
     } else if (err.message !== "invalid_token") alert(err.message);
   }
 };
@@ -16,6 +16,9 @@ const onError = (e: any) => {
 export const queryFn = async <T extends any = any>(key: string): Promise<T> => {
   const headers = getHeaders();
   const query = await fetch(`${base}${key}`, { headers });
+  console.log(query.headers);
+  if (query.headers.get("access-token"))
+    saveTokens(query.headers.get("access-token") || "", headers["refresh-token"], query.headers.get("expires-at") || 0);
   if (query.status === 401) throw new Error("unauth");
   if (query.status > 299) throw new Error(await query.text());
   return await query.json();
@@ -32,6 +35,8 @@ export const mutationFn = async ([path, body, method = "POST", mutlipart = false
       "Content-Type": mutlipart ? "multipart/form-data" : "application/json",
     },
   });
+  if (mutation.headers.get("access-token"))
+    saveTokens(mutation.headers.get("access-token") || "", headers["refresh-token"], mutation.headers.get("expires-at") || 0);
   if (mutation.status === 401) throw new Error("unauth");
   if (mutation.status > 299) throw new Error(await mutation.text());
   return await mutation.json();

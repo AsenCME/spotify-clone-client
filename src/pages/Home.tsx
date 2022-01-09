@@ -6,7 +6,7 @@ import PlayerControls from "../componets/PlayerControls";
 
 export default function Home(props: RouteComponentProps) {
   return (
-    <div className="bg-gray-300" style={{ paddingBottom: 100 }}>
+    <div className="bg-gray-300" style={{ paddingBottom: 150 }}>
       <Header />
       <Router>
         <Dashboard path="/" />

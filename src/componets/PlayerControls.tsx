@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { IoPause, IoPlay, IoPlaySkipBack, IoPlaySkipForward, IoShuffle } from "react-icons/io5";
 import useDuration from "../utils/hooks/useDuration";
 import { WebPlaybackState } from "../utils/models";
 import { usePlayer } from "../utils/Player";
+import IconButton from "./IconButton";
 
 export default function PlayerControls() {
-  const [playing, setPlaying] = useState(false);
-  const { currentTrack, player, play } = usePlayer();
+  const { playing, currentTrack, shuffle, getState, prev, next, toggle } = usePlayer();
   const [position, setPosition] = useState(0);
   const progress = useMemo(() => {
     return currentTrack ? (position / currentTrack.duration_ms) * 100 : 0;
@@ -13,14 +14,16 @@ export default function PlayerControls() {
   const { format } = useDuration();
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      const state = (await player?.getCurrentState()) as WebPlaybackState | undefined;
-      if (state) setPosition(state.position);
-    }, 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [currentTrack]);
+    if (playing) {
+      const interval = setInterval(async () => {
+        const state = (await getState()) as WebPlaybackState | undefined;
+        if (state) setPosition(state.position);
+      }, 1000);
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [currentTrack, playing]);
 
   if (!currentTrack) return null;
   return (
@@ -35,6 +38,24 @@ export default function PlayerControls() {
           <div className="text-xs text-gray-100 truncate">{currentTrack.album.name}</div>
           <div className="text-sm font-bold truncate">{currentTrack.name}</div>
           <div className="text-xs text-gray-100 truncate">{currentTrack.artists.map((x) => x.name).join(", ")}</div>
+        </div>
+      </div>
+      <div className="mt-4 flex items-center justify-between">
+        <div className="flex items-center">
+          <IconButton onClick={prev}>
+            <IoPlaySkipBack size={24} />
+          </IconButton>
+          <IconButton margin={{ l: 16, r: 16 }} onClick={toggle}>
+            {playing ? <IoPause size={32} /> : <IoPlay size={32} />}
+          </IconButton>
+          <IconButton onClick={next}>
+            <IoPlaySkipForward size={24} />
+          </IconButton>
+        </div>
+        <div className="flex items-center">
+          <IconButton color="light" active={shuffle} onClick={() => {}}>
+            <IoShuffle size={24} />
+          </IconButton>
         </div>
       </div>
       <div className="mt-4 flex items-center">
