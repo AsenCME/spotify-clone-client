@@ -11,7 +11,7 @@ export default function IconButton({ active, margin, color = "light", onClick, c
   if (color === "light")
     return (
       <div
-        className="relative flex-none transition-all hover:scale-110 cursor-pointer text-gray-300 hover:text-white"
+        className="relative flex-none transition-all hover:scale-110 cursor-pointer text-gray-300 hover:text-white flex items-center"
         style={{ marginLeft: margin?.l, marginRight: margin?.r, marginTop: margin?.t, marginBottom: margin?.b }}
         onClick={onClick}
       >
@@ -21,7 +21,7 @@ export default function IconButton({ active, margin, color = "light", onClick, c
     );
   return (
     <div
-      className="relative flex-none transition-all hover:scale-110 cursor-pointer text-gray-600 hover:text-black"
+      className="relative flex-none transition-all hover:scale-110 cursor-pointer text-gray-600 hover:text-black flex items-center"
       style={{ marginLeft: margin?.l, marginRight: margin?.r, marginTop: margin?.t, marginBottom: margin?.b }}
       onClick={onClick}
     >

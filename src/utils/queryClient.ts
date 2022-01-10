@@ -16,7 +16,6 @@ const onError = (e: any) => {
 export const queryFn = async <T extends any = any>(key: string): Promise<T> => {
   const headers = getHeaders();
   const query = await fetch(`${base}${key}`, { headers });
-  console.log(query.headers);
   if (query.headers.get("access-token"))
     saveTokens(query.headers.get("access-token") || "", headers["refresh-token"], query.headers.get("expires-at") || 0);
   if (query.status === 401) throw new Error("unauth");

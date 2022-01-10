@@ -6,6 +6,7 @@ export type User = {
   image: string;
   followers: number;
   product: string;
+  country: string;
 };
 
 export interface Track {
@@ -18,6 +19,18 @@ export interface Track {
   name: string;
   preview: string;
 }
+
+export interface Artist {
+  image: string;
+  followers: number;
+  genres: string[];
+  id: string;
+  name: string;
+  popularity: number;
+  url: string;
+}
+
+export type SpotifyTimeRange = "short_term" | "medium_term" | "long_term";
 
 export interface WebPlaybackState {
   duration: number;
